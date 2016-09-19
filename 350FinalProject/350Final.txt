@@ -1,0 +1,1761 @@
+Gregory Zechariah McPherson ,Nicholas Puig
+Dr. Yan Tong
+CSCE 350: Intro to Design and Analysis
+December 4th 2015
+	The challenged posed to us in this assignment is to be able to search through a query of data, using a given similarity function, recognize and discern AU1, AU12, and AU17. These points of data represent raising inner brow, raising lip corners, and a raised chin, respectively. The goal of this code is to be able to recognize facial expression and be able to compare the similarities to its surrounding files. To accomplish this, we were instructed to apply a given similarity function as well as our knowledge gained through this course. This folder, appropriately is named DATA and without this key information, the code will not run properly.
+	The methods used in this solution first and foremost assume that all data is contained within the same folder. Then we use a for-loop to loop through the first 10 values to convert into a string. Because of how 10 is viewed. It was easy to loop through 10 templates and 30 queries, 1 through 9, to match up with the file name which is written 001,002,etc.  For the next 37 templates and 111 queries, the for-loop iterates through and assigns the i value to 0i+rest of file name to properly identify each file. The Query files are separated by AU1,AU12 and AU17, separated into Q1,Q2,Q3 respectively. Now each is a string and can be further applied in the code. 
+The next step is utilizing a templateFile to give the size of all the template data that can then be referenced to allocate memory to RAM. Then the buffer is used to populate a stringstream TemplateContents which populates a two dimensional array of all the templates. The buffer is subsequently deleted. Before the Solve function ends, we call the ReadQueryandDoSimilarity() function for each of the query lists. Inside said function, a similar process is used as the templateFile except now it is a QueryFile, following the same format as the previous templateFile read in. The queries are filed into FileInContents using the same allocated memory from earlier as populates a Query array. Following the given algorithm, we begin calculating similarity. A for loop is created and the value at I and j for the templateArray is assigned to TempVal, as a way to multiply against the value of the Query array. This is done to use only one square root function which will be explained later. After all is calculated, the value found is pushed into a vector defined in our .h file. The numbers variables are cleared and the process loops until all data is in the vector. With all the values, now all that is left is to sort them. Using a standard sort function and a Boolean compare that compares by the second value (not the template file), all results are sorted. All that is left, is a print function which writes using standard ios writes an out file and formats the data for readability. Before closing the function, the vector and the buffer is once again deleted. Leading to a much cleaner running program. 
+Pseudocode:
+//ALGORITHM Project()
+//INPUT:: A set of D values from a PATH
+//Output:: 10 closest values per query file, their row and value.
+for i <-1 to 48
+	Convert each file in D to string 
+Call Solve() for each newly created string
+ALGORITHM Compare()
+//INPUT: a<int,float> , b<int,float>)
+//OUTPUT second value of a> second value of b
+	return second value in a> second value in b
+ALGORITHM Solve()
+// T is a string of template files
+//Query1, Query2, Query3 are set to query files that contain in AU01,AU12,AU17 respectively
+//INPUT :: string Template, string Query1, string Query2, string Query3
+TemplateFile and buffer variables created
+	Set TemplateFile <- size of T
+	*buffer <- char[length of TemplateFile]
+	Load TemplateFile(buffer,length) to RAM
+Create TemplateContents(buffer)
+while i <- 0 i < FileInContents.length
+	val <- i
+	TemplateArray[Row][Col]<- val
+	if Col ==5631
+		Col <- -1
+		Increase Row
+	else
+		Increase Col
+ delete buffer from RAM
+Call ReadQueryAndDoSimularity() for Query1,Query2 and Query 2
+ALGORITHM ReadQueryAndDoSimularity()
+//GOAL: Read the Queries and Determine how similar values are
+//INPUT: const string &FileName
+	create a vector v size of D
+	FileIn and buffer variables created
+	FineIn <- size of FileName
+	*buffer <- char[length of FileIn]
+	Load FileIn(buffer,length) to RAM
+Create FileInContents(buffer)
+while i <- 0, i < FileInContents.length
+	Query[i]
+	X2 <- i*i
+for i <- 0, i < 138
+	for j<-0, j<5632
+		TempVal <- TemplateArray[i][j]
+XkYjk <- XkYjk+(TempVal * Query[j])
+		Y2 <- Y2+(TempVal * TempVal)
+ temp <- squareroot(X2*Y2)
+temp <- (XkYjk/temp)
+Push row and temp into v
+//Used Standard Library of sort from begin to end of vector
+Implement Compare Boolean
+Print(v,FileName) to Out.txt
+Clear vector
+Delete buffer		
+
+END
+In order to proceed with optimal results, we implemented various different methods. These methods include allocating memory space in RAM. By taking the file’s size and using it as the reference of how much memory to allocate. Then when the memory is no longer required, then that memory is deleted and the buffer is removed. This avoids using hard drive space and taking more time. RAM is simply faster. The clearing of the buffer is key in order to avoid unnecessary variables and reallocation.  Another way to expedite the code was by using one square root function in the similarity function instead of using two. The less operations the algorithm performs, the less time it will take to complete. Because of how the square root function is utilized, implementing it over the product of both summations will still yield the same result. The sort function is from standard libraries. If we had written our own, it very may well have been a more inefficient algorithm. 
+Many of the experimental results were lost to feelings of unimportance as well as the multitude of failures that come from developing one’s own code. Some key failures include not assigning to RAM. If the values were not assigned to RAM the runtime was eleven seconds. Another was reading in all files at once, instead of reading in a file as needed (separation of templateArray and Query array creation). Now while this didn’t have an explicit run time, it did give an error that read as std::bad_alloc and the task was aborted with a core dump. Over allocation of RAM caused various core dumps while we attempted to find a good balance of RAM usage. It is important to note that due to the nature of the development of the program on school machines the runtime at any point could have been hindered by amount of users on the CPU at the point of trial. Not to mention that user activity as well as user data usage will affect the run time significantly.
+The program was executed in its final form in 3.81374 seconds on machine 01 in lab 1D29 (L-1D39-01.cse.sc.edu). It is important to mention that this code can be run back to back but will continue to append to the existing Out file. The values will not be changed but at first glance it will appear strange. The results are on the final page directly from the log file. In terms of job assignments for the assignment, Gregory McPerson provided much of the typing hours of code debugging and primary designer. Nicholas Puig, provided conceptual support, theory, was responsible for the written report, pseudocode included, as well as gave his input for debugging and suggestions for potential fixes. 
+	
+Results:
+---------------------------------
+Ten closest for DATA/001_AU01_query.dat are: 
+Row: 4, Value: 0.47524 
+Row: 5, Value: 0.47524 
+Row: 9, Value: 0.463927 
+Row: 7, Value: 0.460817 
+Row: 72, Value: 0.452896 
+Row: 114, Value: 0.442112 
+Row: 128, Value: 0.436886 
+Row: 49, Value: 0.435003 
+Row: 60, Value: 0.433175 
+Row: 41, Value: 0.432754 
+---------------------------------
+Ten closest for DATA/001_AU12_query.dat are: 
+Row: 3, Value: 0.51713 
+Row: 135, Value: 0.511984 
+Row: 128, Value: 0.503587 
+Row: 87, Value: 0.479956 
+Row: 70, Value: 0.479858 
+Row: 75, Value: 0.471453 
+Row: 8, Value: 0.469293 
+Row: 41, Value: 0.466002 
+Row: 38, Value: 0.464717 
+Row: 13, Value: 0.461273 
+---------------------------------
+Ten closest for DATA/001_AU17_query.dat are: 
+Row: 6, Value: 0.328523 
+Row: 9, Value: 0.322788 
+Row: 30, Value: 0.320981 
+Row: 7, Value: 0.312228 
+Row: 104, Value: 0.311198 
+Row: 103, Value: 0.311198 
+Row: 134, Value: 0.31095 
+Row: 128, Value: 0.30768 
+Row: 55, Value: 0.307271 
+Row: 56, Value: 0.307271 
+---------------------------------
+Ten closest for DATA/002_AU01_query.dat are: 
+Row: 8, Value: 0.426406 
+Row: 3, Value: 0.423201 
+Row: 38, Value: 0.421691 
+Row: 33, Value: 0.420614 
+Row: 19, Value: 0.413885 
+Row: 119, Value: 0.411769 
+Row: 116, Value: 0.407622 
+Row: 126, Value: 0.407079 
+Row: 41, Value: 0.406557 
+Row: 91, Value: 0.405184 
+---------------------------------
+Ten closest for DATA/002_AU12_query.dat are: 
+Row: 41, Value: 0.517193 
+Row: 3, Value: 0.517137 
+Row: 38, Value: 0.51248 
+Row: 91, Value: 0.495798 
+Row: 75, Value: 0.488711 
+Row: 135, Value: 0.488521 
+Row: 119, Value: 0.482342 
+Row: 87, Value: 0.477924 
+Row: 33, Value: 0.472903 
+Row: 106, Value: 0.465927 
+---------------------------------
+Ten closest for DATA/002_AU17_query.dat are: 
+Row: 6, Value: 0.462934 
+Row: 131, Value: 0.453913 
+Row: 115, Value: 0.441572 
+Row: 71, Value: 0.435934 
+Row: 118, Value: 0.435755 
+Row: 36, Value: 0.427402 
+Row: 2, Value: 0.423894 
+Row: 56, Value: 0.42169 
+Row: 55, Value: 0.42169 
+Row: 86, Value: 0.419778 
+---------------------------------
+Ten closest for DATA/003_AU01_query.dat are: 
+Row: 7, Value: 0.523344 
+Row: 10, Value: 0.519751 
+Row: 85, Value: 0.50407 
+Row: 117, Value: 0.501594 
+Row: 114, Value: 0.499348 
+Row: 73, Value: 0.488994 
+Row: 93, Value: 0.480061 
+Row: 4, Value: 0.475143 
+Row: 51, Value: 0.470175 
+Row: 28, Value: 0.468878 
+---------------------------------
+Ten closest for DATA/003_AU12_query.dat are: 
+Row: 7, Value: 0.52345 
+Row: 10, Value: 0.519857 
+Row: 85, Value: 0.504172 
+Row: 117, Value: 0.501696 
+Row: 114, Value: 0.49945 
+Row: 73, Value: 0.489094 
+Row: 93, Value: 0.480159 
+Row: 4, Value: 0.47524 
+Row: 51, Value: 0.470271 
+Row: 28, Value: 0.468973 
+---------------------------------
+Ten closest for DATA/003_AU17_query.dat are: 
+Row: 131, Value: 0.532775 
+Row: 115, Value: 0.516232 
+Row: 55, Value: 0.512025 
+Row: 56, Value: 0.512025 
+Row: 130, Value: 0.496602 
+Row: 37, Value: 0.49637 
+Row: 9, Value: 0.480106 
+Row: 7, Value: 0.473896 
+Row: 2, Value: 0.462932 
+Row: 15, Value: 0.46092 
+---------------------------------
+Ten closest for DATA/004_AU01_query.dat are: 
+Row: 69, Value: 0.585548 
+Row: 85, Value: 0.566808 
+Row: 49, Value: 0.556072 
+Row: 93, Value: 0.549422 
+Row: 114, Value: 0.547003 
+Row: 51, Value: 0.546004 
+Row: 35, Value: 0.544316 
+Row: 124, Value: 0.540443 
+Row: 117, Value: 0.533418 
+Row: 61, Value: 0.526522 
+---------------------------------
+Ten closest for DATA/004_AU12_query.dat are: 
+Row: 105, Value: 0.627849 
+Row: 128, Value: 0.584869 
+Row: 126, Value: 0.582415 
+Row: 70, Value: 0.556351 
+Row: 111, Value: 0.555623 
+Row: 50, Value: 0.552845 
+Row: 59, Value: 0.543983 
+Row: 13, Value: 0.541685 
+Row: 43, Value: 0.541075 
+Row: 91, Value: 0.529351 
+---------------------------------
+Ten closest for DATA/004_AU17_query.dat are: 
+Row: 125, Value: 0.298935 
+Row: 103, Value: 0.293055 
+Row: 104, Value: 0.293055 
+Row: 39, Value: 0.284021 
+Row: 60, Value: 0.27977 
+Row: 105, Value: 0.278507 
+Row: 61, Value: 0.276092 
+Row: 86, Value: 0.274538 
+Row: 131, Value: 0.273887 
+Row: 115, Value: 0.27176 
+---------------------------------
+Ten closest for DATA/005_AU01_query.dat are: 
+Row: 88, Value: 0.54687 
+Row: 7, Value: 0.519815 
+Row: 8, Value: 0.519815 
+Row: 10, Value: 0.50935 
+Row: 114, Value: 0.489174 
+Row: 61, Value: 0.48884 
+Row: 85, Value: 0.487766 
+Row: 93, Value: 0.486737 
+Row: 42, Value: 0.481532 
+Row: 65, Value: 0.477974 
+---------------------------------
+Ten closest for DATA/005_AU12_query.dat are: 
+Row: 19, Value: 0.0217613 
+Row: 116, Value: 0.0217609 
+Row: 95, Value: 0.0212835 
+Row: 119, Value: 0.0207606 
+Row: 63, Value: 0.0205903 
+Row: 57, Value: 0.0205316 
+Row: 41, Value: 0.0205201 
+Row: 54, Value: 0.0201159 
+Row: 64, Value: 0.0199945 
+Row: 79, Value: 0.0199046 
+---------------------------------
+Ten closest for DATA/005_AU17_query.dat are: 
+Row: 94, Value: 0.47566 
+Row: 62, Value: 0.458351 
+Row: 57, Value: 0.430176 
+Row: 90, Value: 0.421649 
+Row: 56, Value: 0.417782 
+Row: 55, Value: 0.417782 
+Row: 44, Value: 0.415042 
+Row: 130, Value: 0.414609 
+Row: 27, Value: 0.414135 
+Row: 92, Value: 0.411196 
+---------------------------------
+Ten closest for DATA/006_AU01_query.dat are: 
+Row: 114, Value: 0.549862 
+Row: 17, Value: 0.523231 
+Row: 49, Value: 0.519033 
+Row: 10, Value: 0.507208 
+Row: 77, Value: 0.506771 
+Row: 69, Value: 0.491454 
+Row: 85, Value: 0.481594 
+Row: 52, Value: 0.479696 
+Row: 53, Value: 0.479696 
+Row: 18, Value: 0.474099 
+---------------------------------
+Ten closest for DATA/006_AU12_query.dat are: 
+Row: 128, Value: 0.567225 
+Row: 91, Value: 0.564544 
+Row: 87, Value: 0.562227 
+Row: 41, Value: 0.552159 
+Row: 50, Value: 0.551122 
+Row: 38, Value: 0.550494 
+Row: 135, Value: 0.544713 
+Row: 11, Value: 0.541685 
+Row: 79, Value: 0.538918 
+Row: 63, Value: 0.525447 
+---------------------------------
+Ten closest for DATA/006_AU17_query.dat are: 
+Row: 16, Value: 0.796596 
+Row: 17, Value: 0.547982 
+Row: 62, Value: 0.508482 
+Row: 63, Value: 0.487228 
+Row: 94, Value: 0.481333 
+Row: 37, Value: 0.467462 
+Row: 115, Value: 0.464948 
+Row: 131, Value: 0.462744 
+Row: 9, Value: 0.460922 
+Row: 127, Value: 0.458889 
+---------------------------------
+Ten closest for DATA/007_AU01_query.dat are: 
+Row: 77, Value: 0.580711 
+Row: 114, Value: 0.555698 
+Row: 26, Value: 0.549807 
+Row: 39, Value: 0.546007 
+Row: 69, Value: 0.544043 
+Row: 73, Value: 0.54003 
+Row: 120, Value: 0.520636 
+Row: 35, Value: 0.508887 
+Row: 132, Value: 0.502895 
+Row: 47, Value: 0.500516 
+---------------------------------
+Ten closest for DATA/007_AU12_query.dat are: 
+Row: 79, Value: 0.571589 
+Row: 18, Value: 0.547355 
+Row: 54, Value: 0.537128 
+Row: 63, Value: 0.536847 
+Row: 19, Value: 0.534588 
+Row: 46, Value: 0.529328 
+Row: 17, Value: 0.522669 
+Row: 116, Value: 0.517236 
+Row: 127, Value: 0.487107 
+Row: 95, Value: 0.480597 
+---------------------------------
+Ten closest for DATA/007_AU17_query.dat are: 
+Row: 18, Value: 0.796449 
+Row: 62, Value: 0.531675 
+Row: 127, Value: 0.472226 
+Row: 63, Value: 0.470798 
+Row: 37, Value: 0.466428 
+Row: 115, Value: 0.464762 
+Row: 17, Value: 0.460496 
+Row: 94, Value: 0.460076 
+Row: 130, Value: 0.454984 
+Row: 90, Value: 0.450408 
+---------------------------------
+Ten closest for DATA/008_AU01_query.dat are: 
+Row: 107, Value: 0.0079791 
+Row: 69, Value: 0.00765393 
+Row: 21, Value: 0.00728346 
+Row: 35, Value: 0.00727239 
+Row: 77, Value: 0.00722365 
+Row: 117, Value: 0.00695467 
+Row: 73, Value: 0.00689677 
+Row: 82, Value: 0.00679614 
+Row: 47, Value: 0.00679592 
+Row: 17, Value: 0.00674235 
+---------------------------------
+Ten closest for DATA/008_AU12_query.dat are: 
+Row: 63, Value: 0.634026 
+Row: 116, Value: 0.588473 
+Row: 41, Value: 0.584807 
+Row: 106, Value: 0.555299 
+Row: 79, Value: 0.548144 
+Row: 15, Value: 0.54502 
+Row: 87, Value: 0.542638 
+Row: 20, Value: 0.535201 
+Row: 54, Value: 0.531837 
+Row: 95, Value: 0.530789 
+---------------------------------
+Ten closest for DATA/008_AU17_query.dat are: 
+Row: 22, Value: 0.54688 
+Row: 78, Value: 0.471824 
+Row: 79, Value: 0.465844 
+Row: 108, Value: 0.457323 
+Row: 84, Value: 0.452947 
+Row: 50, Value: 0.450805 
+Row: 63, Value: 0.450278 
+Row: 18, Value: 0.449513 
+Row: 116, Value: 0.447634 
+Row: 109, Value: 0.445465 
+---------------------------------
+Ten closest for DATA/009_AU01_query.dat are: 
+Row: 49, Value: 0.42382 
+Row: 97, Value: 0.417028 
+Row: 10, Value: 0.410014 
+Row: 12, Value: 0.39599 
+Row: 39, Value: 0.388599 
+Row: 42, Value: 0.377827 
+Row: 36, Value: 0.377637 
+Row: 124, Value: 0.376383 
+Row: 107, Value: 0.371182 
+Row: 121, Value: 0.36705 
+---------------------------------
+Ten closest for DATA/009_AU12_query.dat are: 
+Row: 79, Value: 0.553128 
+Row: 24, Value: 0.54688 
+Row: 64, Value: 0.52804 
+Row: 43, Value: 0.519294 
+Row: 22, Value: 0.513135 
+Row: 41, Value: 0.502726 
+Row: 33, Value: 0.485104 
+Row: 83, Value: 0.482471 
+Row: 20, Value: 0.476278 
+Row: 87, Value: 0.475633 
+---------------------------------
+Ten closest for DATA/009_AU17_query.dat are: 
+Row: 25, Value: 0.34037 
+Row: 42, Value: 0.238893 
+Row: 27, Value: 0.234661 
+Row: 36, Value: 0.234315 
+Row: 131, Value: 0.231069 
+Row: 81, Value: 0.229223 
+Row: 115, Value: 0.22805 
+Row: 52, Value: 0.227253 
+Row: 53, Value: 0.227253 
+Row: 50, Value: 0.223984 
+---------------------------------
+Ten closest for DATA/010_AU01_query.dat are: 
+Row: 77, Value: 0.569361 
+Row: 39, Value: 0.56834 
+Row: 21, Value: 0.549863 
+Row: 85, Value: 0.534623 
+Row: 117, Value: 0.519804 
+Row: 125, Value: 0.501971 
+Row: 12, Value: 0.493537 
+Row: 35, Value: 0.483476 
+Row: 69, Value: 0.481209 
+Row: 124, Value: 0.478338 
+---------------------------------
+Ten closest for DATA/010_AU12_query.dat are: 
+Row: 27, Value: 0.620706 
+Row: 91, Value: 0.472799 
+Row: 41, Value: 0.47201 
+Row: 50, Value: 0.471032 
+Row: 87, Value: 0.460678 
+Row: 135, Value: 0.456357 
+Row: 123, Value: 0.440848 
+Row: 43, Value: 0.440791 
+Row: 59, Value: 0.439667 
+Row: 16, Value: 0.427188 
+---------------------------------
+Ten closest for DATA/010_AU17_query.dat are: 
+Row: 115, Value: 0.511325 
+Row: 131, Value: 0.499616 
+Row: 55, Value: 0.486306 
+Row: 56, Value: 0.486306 
+Row: 86, Value: 0.478238 
+Row: 48, Value: 0.467272 
+Row: 53, Value: 0.464008 
+Row: 52, Value: 0.464008 
+Row: 136, Value: 0.459161 
+Row: 137, Value: 0.459161 
+---------------------------------
+Ten closest for DATA/011_AU01_query.dat are: 
+Row: 93, Value: 0.476427 
+Row: 7, Value: 0.46885 
+Row: 8, Value: 0.46885 
+Row: 38, Value: 0.462566 
+Row: 52, Value: 0.455983 
+Row: 53, Value: 0.455983 
+Row: 10, Value: 0.444043 
+Row: 117, Value: 0.436542 
+Row: 85, Value: 0.430541 
+Row: 124, Value: 0.429474 
+---------------------------------
+Ten closest for DATA/011_AU12_query.dat are: 
+Row: 93, Value: 0.476427 
+Row: 7, Value: 0.46885 
+Row: 8, Value: 0.46885 
+Row: 38, Value: 0.462566 
+Row: 52, Value: 0.455983 
+Row: 53, Value: 0.455983 
+Row: 10, Value: 0.444043 
+Row: 117, Value: 0.436542 
+Row: 85, Value: 0.430541 
+Row: 124, Value: 0.429474 
+---------------------------------
+Ten closest for DATA/011_AU17_query.dat are: 
+Row: 137, Value: 0.425224 
+Row: 136, Value: 0.425224 
+Row: 125, Value: 0.410094 
+Row: 117, Value: 0.404927 
+Row: 71, Value: 0.401562 
+Row: 74, Value: 0.400823 
+Row: 12, Value: 0.39045 
+Row: 39, Value: 0.388559 
+Row: 5, Value: 0.384843 
+Row: 133, Value: 0.384079 
+---------------------------------
+Ten closest for DATA/012_AU01_query.dat are: 
+Row: 69, Value: 0.497035 
+Row: 125, Value: 0.464337 
+Row: 85, Value: 0.456473 
+Row: 124, Value: 0.454585 
+Row: 112, Value: 0.445257 
+Row: 122, Value: 0.445039 
+Row: 121, Value: 0.445039 
+Row: 53, Value: 0.444614 
+Row: 52, Value: 0.444614 
+Row: 12, Value: 0.444285 
+---------------------------------
+Ten closest for DATA/012_AU12_query.dat are: 
+Row: 79, Value: 0.540424 
+Row: 43, Value: 0.51597 
+Row: 135, Value: 0.508341 
+Row: 50, Value: 0.49933 
+Row: 83, Value: 0.498853 
+Row: 11, Value: 0.490736 
+Row: 38, Value: 0.488027 
+Row: 25, Value: 0.485104 
+Row: 41, Value: 0.483984 
+Row: 54, Value: 0.474679 
+---------------------------------
+Ten closest for DATA/012_AU17_query.dat are: 
+Row: 69, Value: 0.497012 
+Row: 125, Value: 0.464315 
+Row: 85, Value: 0.456452 
+Row: 124, Value: 0.454564 
+Row: 112, Value: 0.445236 
+Row: 122, Value: 0.445019 
+Row: 121, Value: 0.445019 
+Row: 53, Value: 0.444594 
+Row: 52, Value: 0.444594 
+Row: 12, Value: 0.444265 
+---------------------------------
+Ten closest for DATA/013_AU01_query.dat are: 
+Row: 85, Value: 0.581734 
+Row: 69, Value: 0.576525 
+Row: 49, Value: 0.56933 
+Row: 51, Value: 0.547649 
+Row: 10, Value: 0.544378 
+Row: 58, Value: 0.52984 
+Row: 114, Value: 0.527924 
+Row: 39, Value: 0.521491 
+Row: 117, Value: 0.515601 
+Row: 124, Value: 0.510201 
+---------------------------------
+Ten closest for DATA/013_AU12_query.dat are: 
+Row: 95, Value: 0.554937 
+Row: 116, Value: 0.547272 
+Row: 90, Value: 0.526567 
+Row: 63, Value: 0.516571 
+Row: 57, Value: 0.515026 
+Row: 54, Value: 0.49319 
+Row: 38, Value: 0.490961 
+Row: 111, Value: 0.490495 
+Row: 87, Value: 0.49008 
+Row: 15, Value: 0.488599 
+---------------------------------
+Ten closest for DATA/013_AU17_query.dat are: 
+Row: 50, Value: 0.0126448 
+Row: 137, Value: 0.0126036 
+Row: 136, Value: 0.0126036 
+Row: 86, Value: 0.0125923 
+Row: 125, Value: 0.012571 
+Row: 71, Value: 0.0121316 
+Row: 12, Value: 0.0121303 
+Row: 53, Value: 0.0119172 
+Row: 52, Value: 0.0119172 
+Row: 10, Value: 0.0118005 
+---------------------------------
+Ten closest for DATA/014_AU01_query.dat are: 
+Row: 117, Value: 0.584972 
+Row: 69, Value: 0.582151 
+Row: 29, Value: 0.567615 
+Row: 124, Value: 0.563836 
+Row: 85, Value: 0.563079 
+Row: 93, Value: 0.553773 
+Row: 12, Value: 0.549302 
+Row: 125, Value: 0.547746 
+Row: 77, Value: 0.545517 
+Row: 49, Value: 0.545433 
+---------------------------------
+Ten closest for DATA/014_AU12_query.dat are: 
+Row: 135, Value: 0.00033594 
+Row: 87, Value: 0.000334741 
+Row: 41, Value: 0.000334348 
+Row: 116, Value: 0.00033034 
+Row: 50, Value: 0.000329547 
+Row: 16, Value: 0.000326683 
+Row: 106, Value: 0.000318632 
+Row: 91, Value: 0.000314214 
+Row: 79, Value: 0.000314069 
+Row: 22, Value: 0.000311069 
+---------------------------------
+Ten closest for DATA/014_AU17_query.dat are: 
+Row: 115, Value: 0.570033 
+Row: 130, Value: 0.568127 
+Row: 131, Value: 0.546602 
+Row: 116, Value: 0.535135 
+Row: 57, Value: 0.514272 
+Row: 127, Value: 0.501163 
+Row: 54, Value: 0.498526 
+Row: 90, Value: 0.496628 
+Row: 9, Value: 0.496372 
+Row: 63, Value: 0.495475 
+---------------------------------
+Ten closest for DATA/015_AU01_query.dat are: 
+Row: 65, Value: 0.000177724 
+Row: 12, Value: 0.000175706 
+Row: 10, Value: 0.000175516 
+Row: 49, Value: 0.000169224 
+Row: 72, Value: 0.000167741 
+Row: 115, Value: 0.000163581 
+Row: 13, Value: 0.000160918 
+Row: 97, Value: 0.000160832 
+Row: 61, Value: 0.000160644 
+Row: 114, Value: 0.00016 
+---------------------------------
+Ten closest for DATA/015_AU12_query.dat are: 
+Row: 87, Value: 0.619163 
+Row: 106, Value: 0.604022 
+Row: 63, Value: 0.58545 
+Row: 22, Value: 0.584426 
+Row: 116, Value: 0.578661 
+Row: 91, Value: 0.578079 
+Row: 41, Value: 0.563043 
+Row: 50, Value: 0.557144 
+Row: 16, Value: 0.551798 
+Row: 57, Value: 0.548064 
+---------------------------------
+Ten closest for DATA/015_AU17_query.dat are: 
+Row: 98, Value: 0.336548 
+Row: 110, Value: 0.336009 
+Row: 112, Value: 0.335508 
+Row: 134, Value: 0.329046 
+Row: 48, Value: 0.32154 
+Row: 118, Value: 0.320541 
+Row: 133, Value: 0.319302 
+Row: 113, Value: 0.319196 
+Row: 128, Value: 0.316761 
+Row: 66, Value: 0.315396 
+---------------------------------
+Ten closest for DATA/016_AU01_query.dat are: 
+Row: 115, Value: 0.51727 
+Row: 63, Value: 0.492698 
+Row: 130, Value: 0.485432 
+Row: 131, Value: 0.481979 
+Row: 45, Value: 0.47657 
+Row: 57, Value: 0.467547 
+Row: 90, Value: 0.465139 
+Row: 22, Value: 0.45962 
+Row: 127, Value: 0.458528 
+Row: 61, Value: 0.458115 
+---------------------------------
+Ten closest for DATA/016_AU12_query.dat are: 
+Row: 95, Value: 0.586065 
+Row: 54, Value: 0.580145 
+Row: 50, Value: 0.576833 
+Row: 123, Value: 0.561381 
+Row: 59, Value: 0.561276 
+Row: 70, Value: 0.548362 
+Row: 135, Value: 0.546883 
+Row: 44, Value: 0.545184 
+Row: 11, Value: 0.541075 
+Row: 111, Value: 0.540856 
+---------------------------------
+Ten closest for DATA/016_AU17_query.dat are: 
+Row: 137, Value: 0.34823 
+Row: 136, Value: 0.34823 
+Row: 125, Value: 0.326537 
+Row: 126, Value: 0.308903 
+Row: 117, Value: 0.305311 
+Row: 64, Value: 0.301735 
+Row: 12, Value: 0.300676 
+Row: 53, Value: 0.300283 
+Row: 52, Value: 0.300283 
+Row: 39, Value: 0.298652 
+---------------------------------
+Ten closest for DATA/017_AU01_query.dat are: 
+Row: 42, Value: 0.000353499 
+Row: 49, Value: 0.00033999 
+Row: 85, Value: 0.000338708 
+Row: 124, Value: 0.000331033 
+Row: 120, Value: 0.000329548 
+Row: 21, Value: 0.000325928 
+Row: 69, Value: 0.000324973 
+Row: 61, Value: 0.000317373 
+Row: 38, Value: 0.000317369 
+Row: 114, Value: 0.000314028 
+---------------------------------
+Ten closest for DATA/017_AU12_query.dat are: 
+Row: 20, Value: 0.529934 
+Row: 116, Value: 0.522712 
+Row: 57, Value: 0.508886 
+Row: 95, Value: 0.491803 
+Row: 130, Value: 0.485696 
+Row: 127, Value: 0.478956 
+Row: 63, Value: 0.478923 
+Row: 37, Value: 0.473746 
+Row: 54, Value: 0.472522 
+Row: 115, Value: 0.45364 
+---------------------------------
+Ten closest for DATA/017_AU17_query.dat are: 
+Row: 133, Value: 0.529631 
+Row: 134, Value: 0.521045 
+Row: 118, Value: 0.517999 
+Row: 42, Value: 0.510774 
+Row: 113, Value: 0.510396 
+Row: 125, Value: 0.501866 
+Row: 112, Value: 0.501786 
+Row: 92, Value: 0.5003 
+Row: 91, Value: 0.498004 
+Row: 86, Value: 0.497589 
+---------------------------------
+Ten closest for DATA/018_AU01_query.dat are: 
+Row: 85, Value: 0.577312 
+Row: 38, Value: 0.569289 
+Row: 10, Value: 0.556095 
+Row: 114, Value: 0.554851 
+Row: 69, Value: 0.554715 
+Row: 42, Value: 0.546091 
+Row: 124, Value: 0.529388 
+Row: 61, Value: 0.526215 
+Row: 50, Value: 0.522126 
+Row: 17, Value: 0.519033 
+---------------------------------
+Ten closest for DATA/018_AU12_query.dat are: 
+Row: 46, Value: 0.576833 
+Row: 128, Value: 0.567256 
+Row: 126, Value: 0.561974 
+Row: 87, Value: 0.56084 
+Row: 44, Value: 0.557507 
+Row: 41, Value: 0.55532 
+Row: 11, Value: 0.552845 
+Row: 70, Value: 0.552374 
+Row: 16, Value: 0.551122 
+Row: 39, Value: 0.548466 
+---------------------------------
+Ten closest for DATA/018_AU17_query.dat are: 
+Row: 52, Value: 0.56524 
+Row: 53, Value: 0.56524 
+Row: 38, Value: 0.547622 
+Row: 10, Value: 0.546039 
+Row: 61, Value: 0.5353 
+Row: 85, Value: 0.527812 
+Row: 69, Value: 0.523395 
+Row: 93, Value: 0.51951 
+Row: 86, Value: 0.513324 
+Row: 71, Value: 0.511854 
+---------------------------------
+Ten closest for DATA/019_AU01_query.dat are: 
+Row: 54, Value: 0.565268 
+Row: 137, Value: 0.547188 
+Row: 136, Value: 0.547188 
+Row: 71, Value: 0.544415 
+Row: 85, Value: 0.541877 
+Row: 124, Value: 0.527469 
+Row: 69, Value: 0.526045 
+Row: 125, Value: 0.519436 
+Row: 10, Value: 0.518097 
+Row: 39, Value: 0.516903 
+---------------------------------
+Ten closest for DATA/019_AU12_query.dat are: 
+Row: 95, Value: 0.663209 
+Row: 57, Value: 0.583342 
+Row: 63, Value: 0.582895 
+Row: 46, Value: 0.580145 
+Row: 116, Value: 0.575838 
+Row: 20, Value: 0.537743 
+Row: 53, Value: 0.53559 
+Row: 22, Value: 0.531837 
+Row: 135, Value: 0.529014 
+Row: 44, Value: 0.528189 
+---------------------------------
+Ten closest for DATA/019_AU17_query.dat are: 
+Row: 54, Value: 0.565264 
+Row: 137, Value: 0.547185 
+Row: 136, Value: 0.547185 
+Row: 71, Value: 0.544411 
+Row: 85, Value: 0.541873 
+Row: 124, Value: 0.527466 
+Row: 69, Value: 0.526042 
+Row: 125, Value: 0.519433 
+Row: 10, Value: 0.518094 
+Row: 39, Value: 0.5169 
+---------------------------------
+Ten closest for DATA/020_AU01_query.dat are: 
+Row: 131, Value: 0.54179 
+Row: 12, Value: 0.525209 
+Row: 63, Value: 0.515083 
+Row: 9, Value: 0.512027 
+Row: 115, Value: 0.507231 
+Row: 134, Value: 0.504123 
+Row: 125, Value: 0.503704 
+Row: 136, Value: 0.502311 
+Row: 137, Value: 0.502311 
+Row: 86, Value: 0.500935 
+---------------------------------
+Ten closest for DATA/020_AU12_query.dat are: 
+Row: 63, Value: 0.634881 
+Row: 116, Value: 0.61228 
+Row: 57, Value: 0.583342 
+Row: 95, Value: 0.568209 
+Row: 130, Value: 0.556876 
+Row: 44, Value: 0.548422 
+Row: 106, Value: 0.535054 
+Row: 22, Value: 0.51817 
+Row: 115, Value: 0.51729 
+Row: 37, Value: 0.515026 
+---------------------------------
+Ten closest for DATA/020_AU17_query.dat are: 
+Row: 131, Value: 0.54179 
+Row: 12, Value: 0.525209 
+Row: 63, Value: 0.515083 
+Row: 9, Value: 0.512027 
+Row: 115, Value: 0.507231 
+Row: 134, Value: 0.504123 
+Row: 125, Value: 0.503704 
+Row: 136, Value: 0.502311 
+Row: 137, Value: 0.502311 
+Row: 86, Value: 0.500935 
+---------------------------------
+Ten closest for DATA/021_AU01_query.dat are: 
+Row: 85, Value: 0.606073 
+Row: 38, Value: 0.52984 
+Row: 10, Value: 0.526223 
+Row: 52, Value: 0.515477 
+Row: 69, Value: 0.507203 
+Row: 107, Value: 0.506306 
+Row: 82, Value: 0.500253 
+Row: 54, Value: 0.498265 
+Row: 114, Value: 0.49393 
+Row: 124, Value: 0.492257 
+---------------------------------
+Ten closest for DATA/021_AU12_query.dat are: 
+Row: 91, Value: 0.591855 
+Row: 46, Value: 0.561276 
+Row: 83, Value: 0.555012 
+Row: 11, Value: 0.543983 
+Row: 105, Value: 0.53834 
+Row: 44, Value: 0.525913 
+Row: 75, Value: 0.521886 
+Row: 64, Value: 0.510514 
+Row: 87, Value: 0.502346 
+Row: 16, Value: 0.50105 
+---------------------------------
+Ten closest for DATA/021_AU17_query.dat are: 
+Row: 12, Value: 0.541772 
+Row: 42, Value: 0.5336 
+Row: 71, Value: 0.517096 
+Row: 125, Value: 0.515293 
+Row: 104, Value: 0.512785 
+Row: 103, Value: 0.512785 
+Row: 89, Value: 0.509792 
+Row: 61, Value: 0.505304 
+Row: 131, Value: 0.500515 
+Row: 85, Value: 0.499665 
+---------------------------------
+Ten closest for DATA/022_AU01_query.dat are: 
+Row: 54, Value: 0.000732004 
+Row: 12, Value: 0.000731079 
+Row: 125, Value: 0.000730152 
+Row: 85, Value: 0.00072853 
+Row: 114, Value: 0.000723902 
+Row: 10, Value: 0.000720047 
+Row: 52, Value: 0.000719597 
+Row: 42, Value: 0.000701693 
+Row: 56, Value: 0.000698863 
+Row: 55, Value: 0.000698863 
+---------------------------------
+Ten closest for DATA/022_AU12_query.dat are: 
+Row: 116, Value: 0.000963865 
+Row: 60, Value: 0.000910876 
+Row: 22, Value: 0.000909649 
+Row: 44, Value: 0.000840505 
+Row: 57, Value: 0.000836291 
+Row: 95, Value: 0.000828028 
+Row: 130, Value: 0.000827633 
+Row: 115, Value: 0.000796785 
+Row: 90, Value: 0.000794755 
+Row: 87, Value: 0.00079092 
+---------------------------------
+Ten closest for DATA/022_AU17_query.dat are: 
+Row: 94, Value: 7.25901e-05 
+Row: 19, Value: 7.04806e-05 
+Row: 18, Value: 6.73937e-05 
+Row: 115, Value: 6.62211e-05 
+Row: 116, Value: 6.50854e-05 
+Row: 60, Value: 6.42556e-05 
+Row: 92, Value: 6.34664e-05 
+Row: 130, Value: 6.3309e-05 
+Row: 51, Value: 6.22628e-05 
+Row: 40, Value: 6.22262e-05 
+---------------------------------
+Ten closest for DATA/023_AU01_query.dat are: 
+Row: 45, Value: 0.000145251 
+Row: 68, Value: 0.00013633 
+Row: 64, Value: 0.000130909 
+Row: 10, Value: 0.000130683 
+Row: 13, Value: 0.000130544 
+Row: 12, Value: 0.000124584 
+Row: 88, Value: 0.000123952 
+Row: 66, Value: 0.000123627 
+Row: 85, Value: 0.000120981 
+Row: 58, Value: 0.00012044 
+---------------------------------
+Ten closest for DATA/023_AU12_query.dat are: 
+Row: 119, Value: 0.583983 
+Row: 91, Value: 0.562563 
+Row: 87, Value: 0.557404 
+Row: 75, Value: 0.552091 
+Row: 79, Value: 0.53103 
+Row: 25, Value: 0.527012 
+Row: 95, Value: 0.525478 
+Row: 44, Value: 0.522015 
+Row: 105, Value: 0.521098 
+Row: 135, Value: 0.519054 
+---------------------------------
+Ten closest for DATA/023_AU17_query.dat are: 
+Row: 67, Value: 0.54059 
+Row: 68, Value: 0.45693 
+Row: 134, Value: 0.402575 
+Row: 113, Value: 0.400769 
+Row: 51, Value: 0.396662 
+Row: 133, Value: 0.383675 
+Row: 44, Value: 0.378248 
+Row: 98, Value: 0.372506 
+Row: 61, Value: 0.372439 
+Row: 58, Value: 0.371939 
+---------------------------------
+Ten closest for DATA/024_AU01_query.dat are: 
+Row: 85, Value: 0.608819 
+Row: 117, Value: 0.607164 
+Row: 107, Value: 0.588793 
+Row: 10, Value: 0.58561 
+Row: 124, Value: 0.583619 
+Row: 42, Value: 0.58289 
+Row: 93, Value: 0.582248 
+Row: 38, Value: 0.576521 
+Row: 71, Value: 0.565707 
+Row: 52, Value: 0.55475 
+---------------------------------
+Ten closest for DATA/024_AU12_query.dat are: 
+Row: 66, Value: 0.530624 
+Row: 44, Value: 0.502212 
+Row: 68, Value: 0.499186 
+Row: 60, Value: 0.493426 
+Row: 22, Value: 0.486335 
+Row: 106, Value: 0.485295 
+Row: 57, Value: 0.476293 
+Row: 69, Value: 0.468454 
+Row: 87, Value: 0.466258 
+Row: 116, Value: 0.463209 
+---------------------------------
+Ten closest for DATA/024_AU17_query.dat are: 
+Row: 69, Value: 0.55424 
+Row: 59, Value: 0.424343 
+Row: 58, Value: 0.424343 
+Row: 68, Value: 0.414472 
+Row: 60, Value: 0.412669 
+Row: 130, Value: 0.375662 
+Row: 116, Value: 0.372688 
+Row: 57, Value: 0.370082 
+Row: 127, Value: 0.36958 
+Row: 131, Value: 0.36671 
+---------------------------------
+Ten closest for DATA/025_AU01_query.dat are: 
+Row: 45, Value: 0.50199 
+Row: 64, Value: 0.496659 
+Row: 42, Value: 0.491083 
+Row: 12, Value: 0.488804 
+Row: 105, Value: 0.48541 
+Row: 91, Value: 0.471374 
+Row: 10, Value: 0.469571 
+Row: 93, Value: 0.467606 
+Row: 52, Value: 0.464324 
+Row: 103, Value: 0.463103 
+---------------------------------
+Ten closest for DATA/025_AU12_query.dat are: 
+Row: 111, Value: 0.022912 
+Row: 135, Value: 0.0206454 
+Row: 11, Value: 0.0205454 
+Row: 53, Value: 0.0203985 
+Row: 46, Value: 0.0202504 
+Row: 125, Value: 0.0197989 
+Row: 126, Value: 0.0196511 
+Row: 128, Value: 0.0194949 
+Row: 16, Value: 0.0193683 
+Row: 87, Value: 0.0191943 
+---------------------------------
+Ten closest for DATA/025_AU17_query.dat are: 
+Row: 125, Value: 0.584594 
+Row: 137, Value: 0.577252 
+Row: 136, Value: 0.577252 
+Row: 72, Value: 0.565711 
+Row: 134, Value: 0.55707 
+Row: 109, Value: 0.550788 
+Row: 111, Value: 0.546544 
+Row: 55, Value: 0.544415 
+Row: 56, Value: 0.544415 
+Row: 112, Value: 0.543852 
+---------------------------------
+Ten closest for DATA/026_AU01_query.dat are: 
+Row: 21, Value: 0.0137358 
+Row: 117, Value: 0.0135478 
+Row: 93, Value: 0.01337 
+Row: 114, Value: 0.0129741 
+Row: 42, Value: 0.0128257 
+Row: 72, Value: 0.0127193 
+Row: 85, Value: 0.0124678 
+Row: 7, Value: 0.012439 
+Row: 8, Value: 0.012439 
+Row: 29, Value: 0.0120808 
+---------------------------------
+Ten closest for DATA/026_AU12_query.dat are: 
+Row: 83, Value: 0.495724 
+Row: 91, Value: 0.485965 
+Row: 67, Value: 0.470623 
+Row: 135, Value: 0.461574 
+Row: 119, Value: 0.458418 
+Row: 62, Value: 0.444008 
+Row: 11, Value: 0.442592 
+Row: 87, Value: 0.438871 
+Row: 105, Value: 0.434464 
+Row: 111, Value: 0.423647 
+---------------------------------
+Ten closest for DATA/026_AU17_query.dat are: 
+Row: 133, Value: 0.552427 
+Row: 42, Value: 0.534357 
+Row: 112, Value: 0.523454 
+Row: 113, Value: 0.522452 
+Row: 137, Value: 0.504772 
+Row: 136, Value: 0.504772 
+Row: 125, Value: 0.502268 
+Row: 104, Value: 0.500659 
+Row: 103, Value: 0.500659 
+Row: 117, Value: 0.49261 
+---------------------------------
+Ten closest for DATA/027_AU01_query.dat are: 
+Row: 21, Value: 0.00132691 
+Row: 29, Value: 0.00130084 
+Row: 42, Value: 0.00124796 
+Row: 72, Value: 0.001244 
+Row: 114, Value: 0.00123419 
+Row: 85, Value: 0.0011879 
+Row: 38, Value: 0.00116512 
+Row: 17, Value: 0.00115792 
+Row: 132, Value: 0.00115073 
+Row: 117, Value: 0.0011304 
+---------------------------------
+Ten closest for DATA/027_AU12_query.dat are: 
+Row: 46, Value: 0.480354 
+Row: 25, Value: 0.474569 
+Row: 67, Value: 0.455268 
+Row: 36, Value: 0.435932 
+Row: 11, Value: 0.428632 
+Row: 79, Value: 0.420381 
+Row: 62, Value: 0.419385 
+Row: 119, Value: 0.412913 
+Row: 87, Value: 0.410751 
+Row: 44, Value: 0.407916 
+---------------------------------
+Ten closest for DATA/027_AU17_query.dat are: 
+Row: 22, Value: 0.429141 
+Row: 95, Value: 0.405817 
+Row: 79, Value: 0.401933 
+Row: 66, Value: 0.401404 
+Row: 116, Value: 0.39988 
+Row: 20, Value: 0.399411 
+Row: 115, Value: 0.39547 
+Row: 24, Value: 0.394224 
+Row: 30, Value: 0.39085 
+Row: 125, Value: 0.390357 
+---------------------------------
+Ten closest for DATA/028_AU01_query.dat are: 
+Row: 124, Value: 0.497817 
+Row: 85, Value: 0.496527 
+Row: 56, Value: 0.492475 
+Row: 55, Value: 0.492475 
+Row: 102, Value: 0.487109 
+Row: 61, Value: 0.479682 
+Row: 54, Value: 0.479542 
+Row: 114, Value: 0.467651 
+Row: 17, Value: 0.467639 
+Row: 72, Value: 0.464389 
+---------------------------------
+Ten closest for DATA/028_AU12_query.dat are: 
+Row: 20, Value: 0.572148 
+Row: 25, Value: 0.553035 
+Row: 22, Value: 0.548053 
+Row: 66, Value: 0.54701 
+Row: 36, Value: 0.540334 
+Row: 16, Value: 0.538828 
+Row: 53, Value: 0.53373 
+Row: 67, Value: 0.531978 
+Row: 41, Value: 0.529149 
+Row: 135, Value: 0.527686 
+---------------------------------
+Ten closest for DATA/028_AU17_query.dat are: 
+Row: 53, Value: 0.021525 
+Row: 125, Value: 0.0211134 
+Row: 44, Value: 0.0209384 
+Row: 12, Value: 0.0204841 
+Row: 56, Value: 0.020409 
+Row: 55, Value: 0.020409 
+Row: 108, Value: 0.0203468 
+Row: 89, Value: 0.0203384 
+Row: 57, Value: 0.0199717 
+Row: 115, Value: 0.0199416 
+---------------------------------
+Ten closest for DATA/029_AU01_query.dat are: 
+Row: 61, Value: 0.410508 
+Row: 38, Value: 0.395179 
+Row: 124, Value: 0.382644 
+Row: 54, Value: 0.382276 
+Row: 85, Value: 0.377198 
+Row: 80, Value: 0.366047 
+Row: 114, Value: 0.366033 
+Row: 72, Value: 0.361624 
+Row: 55, Value: 0.361284 
+Row: 56, Value: 0.361284 
+---------------------------------
+Ten closest for DATA/029_AU12_query.dat are: 
+Row: 78, Value: 0.582573 
+Row: 91, Value: 0.567685 
+Row: 62, Value: 0.554917 
+Row: 105, Value: 0.528135 
+Row: 46, Value: 0.514 
+Row: 135, Value: 0.512566 
+Row: 82, Value: 0.506309 
+Row: 16, Value: 0.50226 
+Row: 36, Value: 0.498768 
+Row: 111, Value: 0.497971 
+---------------------------------
+Ten closest for DATA/029_AU17_query.dat are: 
+Row: 86, Value: 0.00369726 
+Row: 24, Value: 0.00364274 
+Row: 81, Value: 0.00364256 
+Row: 16, Value: 0.00361098 
+Row: 53, Value: 0.00360565 
+Row: 131, Value: 0.00357241 
+Row: 40, Value: 0.00351412 
+Row: 82, Value: 0.00350752 
+Row: 74, Value: 0.00348086 
+Row: 91, Value: 0.00342138 
+---------------------------------
+Ten closest for DATA/030_AU01_query.dat are: 
+Row: 72, Value: 0.608808 
+Row: 61, Value: 0.606057 
+Row: 124, Value: 0.597196 
+Row: 93, Value: 0.591148 
+Row: 114, Value: 0.585647 
+Row: 38, Value: 0.581719 
+Row: 117, Value: 0.577977 
+Row: 52, Value: 0.577338 
+Row: 10, Value: 0.566857 
+Row: 42, Value: 0.563784 
+---------------------------------
+Ten closest for DATA/030_AU12_query.dat are: 
+Row: 44, Value: 0.619041 
+Row: 91, Value: 0.613612 
+Row: 106, Value: 0.59595 
+Row: 41, Value: 0.563593 
+Row: 16, Value: 0.561749 
+Row: 53, Value: 0.560364 
+Row: 67, Value: 0.558018 
+Row: 135, Value: 0.557292 
+Row: 119, Value: 0.552609 
+Row: 66, Value: 0.550803 
+---------------------------------
+Ten closest for DATA/030_AU17_query.dat are: 
+Row: 108, Value: 0.578289 
+Row: 125, Value: 0.574981 
+Row: 134, Value: 0.54765 
+Row: 39, Value: 0.546187 
+Row: 136, Value: 0.536416 
+Row: 137, Value: 0.536416 
+Row: 74, Value: 0.536163 
+Row: 118, Value: 0.532422 
+Row: 12, Value: 0.531641 
+Row: 115, Value: 0.526582 
+---------------------------------
+Ten closest for DATA/031_AU01_query.dat are: 
+Row: 13, Value: 0.546913 
+Row: 120, Value: 0.526093 
+Row: 42, Value: 0.511375 
+Row: 114, Value: 0.509388 
+Row: 124, Value: 0.498193 
+Row: 21, Value: 0.493178 
+Row: 72, Value: 0.489256 
+Row: 93, Value: 0.487976 
+Row: 10, Value: 0.481586 
+Row: 64, Value: 0.481579 
+---------------------------------
+Ten closest for DATA/031_AU12_query.dat are: 
+Row: 130, Value: 0.579015 
+Row: 116, Value: 0.565479 
+Row: 66, Value: 0.553944 
+Row: 37, Value: 0.526567 
+Row: 131, Value: 0.524516 
+Row: 115, Value: 0.518274 
+Row: 44, Value: 0.508785 
+Row: 60, Value: 0.507243 
+Row: 22, Value: 0.506486 
+Row: 57, Value: 0.502219 
+---------------------------------
+Ten closest for DATA/031_AU17_query.dat are: 
+Row: 125, Value: 0.514352 
+Row: 131, Value: 0.487726 
+Row: 89, Value: 0.476673 
+Row: 115, Value: 0.475473 
+Row: 84, Value: 0.46831 
+Row: 74, Value: 0.465075 
+Row: 63, Value: 0.464495 
+Row: 12, Value: 0.462893 
+Row: 10, Value: 0.452257 
+Row: 64, Value: 0.447477 
+---------------------------------
+Ten closest for DATA/032_AU01_query.dat are: 
+Row: 88, Value: 0.591164 
+Row: 72, Value: 0.582252 
+Row: 42, Value: 0.55448 
+Row: 10, Value: 0.549484 
+Row: 117, Value: 0.547503 
+Row: 76, Value: 0.525703 
+Row: 134, Value: 0.523566 
+Row: 114, Value: 0.522187 
+Row: 54, Value: 0.519536 
+Row: 52, Value: 0.518723 
+---------------------------------
+Ten closest for DATA/032_AU12_query.dat are: 
+Row: 90, Value: 0.614134 
+Row: 62, Value: 0.591855 
+Row: 44, Value: 0.578457 
+Row: 78, Value: 0.571202 
+Row: 86, Value: 0.567782 
+Row: 16, Value: 0.564544 
+Row: 67, Value: 0.563661 
+Row: 106, Value: 0.557596 
+Row: 125, Value: 0.548595 
+Row: 105, Value: 0.543648 
+---------------------------------
+Ten closest for DATA/032_AU17_query.dat are: 
+Row: 51, Value: 0.5003 
+Row: 65, Value: 0.47885 
+Row: 127, Value: 0.470338 
+Row: 115, Value: 0.467339 
+Row: 53, Value: 0.457114 
+Row: 44, Value: 0.453724 
+Row: 66, Value: 0.453663 
+Row: 108, Value: 0.445726 
+Row: 93, Value: 0.445361 
+Row: 75, Value: 0.443491 
+---------------------------------
+Ten closest for DATA/033_AU01_query.dat are: 
+Row: 99, Value: 0.714235 
+Row: 97, Value: 0.693287 
+Row: 98, Value: 0.622835 
+Row: 53, Value: 0.540139 
+Row: 94, Value: 0.509898 
+Row: 125, Value: 0.49458 
+Row: 11, Value: 0.479541 
+Row: 12, Value: 0.477053 
+Row: 112, Value: 0.468655 
+Row: 128, Value: 0.466458 
+---------------------------------
+Ten closest for DATA/033_AU12_query.dat are: 
+Row: 57, Value: 0.663209 
+Row: 116, Value: 0.589101 
+Row: 46, Value: 0.586065 
+Row: 66, Value: 0.577136 
+Row: 119, Value: 0.576238 
+Row: 111, Value: 0.571202 
+Row: 60, Value: 0.568209 
+Row: 37, Value: 0.554937 
+Row: 125, Value: 0.548698 
+Row: 15, Value: 0.533055 
+---------------------------------
+Ten closest for DATA/033_AU17_query.dat are: 
+Row: 65, Value: 0.541569 
+Row: 131, Value: 0.498513 
+Row: 125, Value: 0.4955 
+Row: 130, Value: 0.492644 
+Row: 58, Value: 0.487685 
+Row: 59, Value: 0.487685 
+Row: 89, Value: 0.487466 
+Row: 60, Value: 0.486165 
+Row: 115, Value: 0.485808 
+Row: 40, Value: 0.481994 
+---------------------------------
+Ten closest for DATA/034_AU01_query.dat are: 
+Row: 99, Value: 0.613166 
+Row: 94, Value: 0.44184 
+Row: 52, Value: 0.437897 
+Row: 125, Value: 0.435991 
+Row: 12, Value: 0.434067 
+Row: 53, Value: 0.429351 
+Row: 42, Value: 0.425945 
+Row: 45, Value: 0.425689 
+Row: 124, Value: 0.419963 
+Row: 44, Value: 0.417436 
+---------------------------------
+Ten closest for DATA/034_AU12_query.dat are: 
+Row: 99, Value: 0.714235 
+Row: 94, Value: 0.533407 
+Row: 53, Value: 0.526411 
+Row: 128, Value: 0.494216 
+Row: 41, Value: 0.492287 
+Row: 11, Value: 0.490944 
+Row: 135, Value: 0.471847 
+Row: 78, Value: 0.467298 
+Row: 105, Value: 0.466443 
+Row: 73, Value: 0.461361 
+---------------------------------
+Ten closest for DATA/034_AU17_query.dat are: 
+Row: 99, Value: 0.622835 
+Row: 125, Value: 0.514859 
+Row: 53, Value: 0.506105 
+Row: 133, Value: 0.5013 
+Row: 108, Value: 0.499346 
+Row: 51, Value: 0.496342 
+Row: 134, Value: 0.495407 
+Row: 52, Value: 0.488306 
+Row: 89, Value: 0.479647 
+Row: 39, Value: 0.471509 
+---------------------------------
+Ten closest for DATA/035_AU01_query.dat are: 
+Row: 74, Value: 0.516093 
+Row: 111, Value: 0.5066 
+Row: 138, Value: 0.477733 
+Row: 137, Value: 0.473862 
+Row: 136, Value: 0.473862 
+Row: 73, Value: 0.471863 
+Row: 128, Value: 0.467363 
+Row: 110, Value: 0.466009 
+Row: 126, Value: 0.461905 
+Row: 122, Value: 0.458461 
+---------------------------------
+Ten closest for DATA/035_AU12_query.dat are: 
+Row: 111, Value: 0.458447 
+Row: 123, Value: 0.447163 
+Row: 126, Value: 0.437683 
+Row: 138, Value: 0.435319 
+Row: 74, Value: 0.434827 
+Row: 11, Value: 0.431527 
+Row: 136, Value: 0.427296 
+Row: 137, Value: 0.427296 
+Row: 46, Value: 0.426218 
+Row: 16, Value: 0.416847 
+---------------------------------
+Ten closest for DATA/035_AU17_query.dat are: 
+Row: 110, Value: 0.510255 
+Row: 74, Value: 0.509593 
+Row: 72, Value: 0.504281 
+Row: 134, Value: 0.500032 
+Row: 111, Value: 0.494459 
+Row: 122, Value: 0.492506 
+Row: 121, Value: 0.492506 
+Row: 137, Value: 0.492477 
+Row: 136, Value: 0.492477 
+Row: 83, Value: 0.487787 
+---------------------------------
+Ten closest for DATA/036_AU01_query.dat are: 
+Row: 12, Value: 0.00842047 
+Row: 74, Value: 0.00772522 
+Row: 63, Value: 0.00760862 
+Row: 96, Value: 0.00759696 
+Row: 125, Value: 0.0075472 
+Row: 10, Value: 0.00750886 
+Row: 11, Value: 0.00743278 
+Row: 77, Value: 0.0074287 
+Row: 134, Value: 0.00740939 
+Row: 42, Value: 0.007351 
+---------------------------------
+Ten closest for DATA/036_AU12_query.dat are: 
+Row: 11, Value: 0.627849 
+Row: 94, Value: 0.543648 
+Row: 12, Value: 0.539326 
+Row: 62, Value: 0.53834 
+Row: 53, Value: 0.53286 
+Row: 86, Value: 0.528225 
+Row: 67, Value: 0.522115 
+Row: 46, Value: 0.520875 
+Row: 111, Value: 0.512131 
+Row: 78, Value: 0.510668 
+---------------------------------
+Ten closest for DATA/036_AU17_query.dat are: 
+Row: 12, Value: 0.567499 
+Row: 74, Value: 0.520643 
+Row: 63, Value: 0.512785 
+Row: 96, Value: 0.511998 
+Row: 125, Value: 0.508645 
+Row: 10, Value: 0.506061 
+Row: 11, Value: 0.500933 
+Row: 77, Value: 0.500659 
+Row: 134, Value: 0.499357 
+Row: 42, Value: 0.495422 
+---------------------------------
+Ten closest for DATA/037_AU01_query.dat are: 
+Row: 72, Value: 0.0831505 
+Row: 42, Value: 0.0760824 
+Row: 117, Value: 0.0754579 
+Row: 124, Value: 0.0754393 
+Row: 10, Value: 0.0736796 
+Row: 88, Value: 0.0734869 
+Row: 61, Value: 0.071501 
+Row: 38, Value: 0.0710181 
+Row: 74, Value: 0.0708448 
+Row: 23, Value: 0.0693976 
+---------------------------------
+Ten closest for DATA/037_AU12_query.dat are: 
+Row: 44, Value: 8.13309e-05 
+Row: 90, Value: 8.02598e-05 
+Row: 94, Value: 7.50306e-05 
+Row: 22, Value: 7.47215e-05 
+Row: 116, Value: 7.39706e-05 
+Row: 66, Value: 7.29449e-05 
+Row: 41, Value: 7.22495e-05 
+Row: 60, Value: 7.19973e-05 
+Row: 111, Value: 7.12214e-05 
+Row: 46, Value: 6.68955e-05 
+---------------------------------
+Ten closest for DATA/037_AU17_query.dat are: 
+Row: 109, Value: 0.702241 
+Row: 89, Value: 0.578289 
+Row: 74, Value: 0.528512 
+Row: 12, Value: 0.523213 
+Row: 125, Value: 0.520249 
+Row: 53, Value: 0.519633 
+Row: 90, Value: 0.516904 
+Row: 136, Value: 0.515852 
+Row: 137, Value: 0.515852 
+Row: 84, Value: 0.514191 
+---------------------------------
+Ten closest for DATA/038_AU01_query.dat are: 
+Row: 96, Value: 0.513305 
+Row: 105, Value: 0.510255 
+Row: 74, Value: 0.497339 
+Row: 88, Value: 0.492974 
+Row: 72, Value: 0.49183 
+Row: 110, Value: 0.480004 
+Row: 121, Value: 0.477979 
+Row: 122, Value: 0.477979 
+Row: 117, Value: 0.477613 
+Row: 103, Value: 0.466009 
+---------------------------------
+Ten closest for DATA/038_AU12_query.dat are: 
+Row: 73, Value: 0.131853 
+Row: 98, Value: 0.121389 
+Row: 135, Value: 0.121318 
+Row: 11, Value: 0.118079 
+Row: 126, Value: 0.116546 
+Row: 74, Value: 0.116149 
+Row: 46, Value: 0.11494 
+Row: 128, Value: 0.11482 
+Row: 90, Value: 0.114597 
+Row: 123, Value: 0.113163 
+---------------------------------
+Ten closest for DATA/038_AU17_query.dat are: 
+Row: 111, Value: 0.702241 
+Row: 74, Value: 0.550788 
+Row: 127, Value: 0.531018 
+Row: 89, Value: 0.522352 
+Row: 98, Value: 0.521515 
+Row: 73, Value: 0.51401 
+Row: 53, Value: 0.511728 
+Row: 135, Value: 0.50954 
+Row: 137, Value: 0.502663 
+Row: 136, Value: 0.502663 
+---------------------------------
+Ten closest for DATA/039_AU01_query.dat are: 
+Row: 88, Value: 0.0948215 
+Row: 21, Value: 0.0899793 
+Row: 52, Value: 0.0898393 
+Row: 17, Value: 0.0890316 
+Row: 10, Value: 0.0885724 
+Row: 80, Value: 0.0874588 
+Row: 64, Value: 0.0857126 
+Row: 38, Value: 0.0854734 
+Row: 72, Value: 0.0852957 
+Row: 96, Value: 0.0845445 
+---------------------------------
+Ten closest for DATA/039_AU12_query.dat are: 
+Row: 133, Value: 0.548782 
+Row: 74, Value: 0.543184 
+Row: 134, Value: 0.535568 
+Row: 77, Value: 0.522811 
+Row: 121, Value: 0.514337 
+Row: 122, Value: 0.514337 
+Row: 136, Value: 0.514237 
+Row: 137, Value: 0.514237 
+Row: 73, Value: 0.510611 
+Row: 11, Value: 0.509294 
+---------------------------------
+Ten closest for DATA/039_AU17_query.dat are: 
+Row: 134, Value: 0.575807 
+Row: 133, Value: 0.567954 
+Row: 122, Value: 0.54212 
+Row: 121, Value: 0.54212 
+Row: 74, Value: 0.527392 
+Row: 77, Value: 0.522452 
+Row: 51, Value: 0.510396 
+Row: 42, Value: 0.503543 
+Row: 118, Value: 0.503 
+Row: 125, Value: 0.501151 
+---------------------------------
+Ten closest for DATA/040_AU01_query.dat are: 
+Row: 72, Value: 0.607008 
+Row: 42, Value: 0.585565 
+Row: 88, Value: 0.57784 
+Row: 96, Value: 0.547359 
+Row: 124, Value: 0.53993 
+Row: 110, Value: 0.534185 
+Row: 10, Value: 0.533338 
+Row: 76, Value: 0.532552 
+Row: 120, Value: 0.527388 
+Row: 118, Value: 0.523889 
+---------------------------------
+Ten closest for DATA/040_AU12_query.dat are: 
+Row: 66, Value: 0.670837 
+Row: 130, Value: 0.622589 
+Row: 60, Value: 0.61139 
+Row: 98, Value: 0.588244 
+Row: 22, Value: 0.587618 
+Row: 44, Value: 0.578197 
+Row: 57, Value: 0.575001 
+Row: 93, Value: 0.564657 
+Row: 127, Value: 0.563419 
+Row: 41, Value: 0.555847 
+---------------------------------
+Ten closest for DATA/040_AU17_query.dat are: 
+Row: 131, Value: 0.639146 
+Row: 130, Value: 0.591639 
+Row: 40, Value: 0.570033 
+Row: 66, Value: 0.555359 
+Row: 44, Value: 0.53165 
+Row: 127, Value: 0.530601 
+Row: 89, Value: 0.526582 
+Row: 12, Value: 0.526262 
+Row: 30, Value: 0.525085 
+Row: 92, Value: 0.52184 
+---------------------------------
+Ten closest for DATA/041_AU01_query.dat are: 
+Row: 42, Value: 0.541508 
+Row: 120, Value: 0.527526 
+Row: 91, Value: 0.526095 
+Row: 21, Value: 0.52069 
+Row: 124, Value: 0.517741 
+Row: 50, Value: 0.506127 
+Row: 132, Value: 0.499927 
+Row: 72, Value: 0.491833 
+Row: 125, Value: 0.488121 
+Row: 117, Value: 0.48765 
+---------------------------------
+Ten closest for DATA/041_AU12_query.dat are: 
+Row: 67, Value: 0.585123 
+Row: 98, Value: 0.576238 
+Row: 90, Value: 0.553078 
+Row: 94, Value: 0.539396 
+Row: 78, Value: 0.538823 
+Row: 15, Value: 0.519957 
+Row: 119, Value: 0.514822 
+Row: 44, Value: 0.511268 
+Row: 114, Value: 0.507054 
+Row: 135, Value: 0.505468 
+---------------------------------
+Ten closest for DATA/041_AU17_query.dat are: 
+Row: 90, Value: 0.543933 
+Row: 125, Value: 0.543608 
+Row: 94, Value: 0.537432 
+Row: 89, Value: 0.532422 
+Row: 120, Value: 0.524027 
+Row: 51, Value: 0.517999 
+Row: 74, Value: 0.510469 
+Row: 136, Value: 0.505043 
+Row: 137, Value: 0.505043 
+Row: 116, Value: 0.503 
+---------------------------------
+Ten closest for DATA/042_AU01_query.dat are: 
+Row: 116, Value: 0.542118 
+Row: 115, Value: 0.514967 
+Row: 72, Value: 0.508778 
+Row: 52, Value: 0.497087 
+Row: 105, Value: 0.492504 
+Row: 42, Value: 0.478112 
+Row: 113, Value: 0.477978 
+Row: 74, Value: 0.474196 
+Row: 96, Value: 0.471075 
+Row: 125, Value: 0.467713 
+---------------------------------
+Ten closest for DATA/042_AU12_query.dat are: 
+Row: 46, Value: 0.561238 
+Row: 53, Value: 0.546822 
+Row: 114, Value: 0.532356 
+Row: 90, Value: 0.513069 
+Row: 135, Value: 0.505108 
+Row: 108, Value: 0.503533 
+Row: 44, Value: 0.501125 
+Row: 125, Value: 0.496777 
+Row: 11, Value: 0.490064 
+Row: 94, Value: 0.488364 
+---------------------------------
+Ten closest for DATA/042_AU17_query.dat are: 
+Row: 116, Value: 0.54212 
+Row: 115, Value: 0.514969 
+Row: 72, Value: 0.50878 
+Row: 52, Value: 0.497088 
+Row: 105, Value: 0.492506 
+Row: 42, Value: 0.478113 
+Row: 113, Value: 0.477979 
+Row: 74, Value: 0.474198 
+Row: 96, Value: 0.471077 
+Row: 125, Value: 0.467715 
+---------------------------------
+Ten closest for DATA/043_AU01_query.dat are: 
+Row: 88, Value: 0.571787 
+Row: 72, Value: 0.558776 
+Row: 42, Value: 0.540522 
+Row: 10, Value: 0.517493 
+Row: 120, Value: 0.51708 
+Row: 110, Value: 0.511451 
+Row: 52, Value: 0.506887 
+Row: 56, Value: 0.505013 
+Row: 55, Value: 0.505013 
+Row: 117, Value: 0.499046 
+---------------------------------
+Ten closest for DATA/043_AU12_query.dat are: 
+Row: 128, Value: 0.721561 
+Row: 11, Value: 0.582415 
+Row: 53, Value: 0.561974 
+Row: 114, Value: 0.54841 
+Row: 73, Value: 0.532134 
+Row: 138, Value: 0.507692 
+Row: 41, Value: 0.505482 
+Row: 16, Value: 0.503313 
+Row: 74, Value: 0.500309 
+Row: 44, Value: 0.497711 
+---------------------------------
+Ten closest for DATA/043_AU17_query.dat are: 
+Row: 74, Value: 0.500616 
+Row: 12, Value: 0.495728 
+Row: 89, Value: 0.492384 
+Row: 92, Value: 0.483418 
+Row: 137, Value: 0.481938 
+Row: 136, Value: 0.481938 
+Row: 98, Value: 0.469877 
+Row: 94, Value: 0.469789 
+Row: 42, Value: 0.469661 
+Row: 134, Value: 0.468749 
+---------------------------------
+Ten closest for DATA/044_AU01_query.dat are: 
+Row: 56, Value: 0.081776 
+Row: 55, Value: 0.081776 
+Row: 74, Value: 0.0797015 
+Row: 111, Value: 0.0784034 
+Row: 73, Value: 0.0781584 
+Row: 137, Value: 0.0779722 
+Row: 136, Value: 0.0779722 
+Row: 112, Value: 0.0779566 
+Row: 46, Value: 0.0748725 
+Row: 57, Value: 0.0741804 
+---------------------------------
+Ten closest for DATA/044_AU12_query.dat are: 
+Row: 129, Value: 0.0635691 
+Row: 11, Value: 0.0515266 
+Row: 53, Value: 0.049975 
+Row: 16, Value: 0.0499722 
+Row: 138, Value: 0.048053 
+Row: 114, Value: 0.0475991 
+Row: 73, Value: 0.046508 
+Row: 44, Value: 0.0461735 
+Row: 41, Value: 0.0450644 
+Row: 6, Value: 0.0443664 
+---------------------------------
+Ten closest for DATA/044_AU17_query.dat are: 
+Row: 119, Value: 0.56424 
+Row: 53, Value: 0.534043 
+Row: 112, Value: 0.531018 
+Row: 118, Value: 0.530601 
+Row: 130, Value: 0.512137 
+Row: 57, Value: 0.504087 
+Row: 66, Value: 0.503337 
+Row: 40, Value: 0.501163 
+Row: 111, Value: 0.496021 
+Row: 44, Value: 0.493964 
+---------------------------------
+Ten closest for DATA/045_AU01_query.dat are: 
+Row: 72, Value: 0.536446 
+Row: 88, Value: 0.531603 
+Row: 38, Value: 0.499925 
+Row: 42, Value: 0.499774 
+Row: 80, Value: 0.498033 
+Row: 21, Value: 0.497327 
+Row: 123, Value: 0.494341 
+Row: 52, Value: 0.49096 
+Row: 120, Value: 0.490679 
+Row: 134, Value: 0.49001 
+---------------------------------
+Ten closest for DATA/045_AU12_query.dat are: 
+Row: 119, Value: 0.623495 
+Row: 118, Value: 0.591638 
+Row: 93, Value: 0.579015 
+Row: 66, Value: 0.57686 
+Row: 40, Value: 0.568127 
+Row: 60, Value: 0.556876 
+Row: 44, Value: 0.532997 
+Row: 22, Value: 0.530613 
+Row: 98, Value: 0.526997 
+Row: 90, Value: 0.524861 
+---------------------------------
+Ten closest for DATA/045_AU17_query.dat are: 
+Row: 118, Value: 0.639146 
+Row: 40, Value: 0.546602 
+Row: 119, Value: 0.543563 
+Row: 59, Value: 0.54179 
+Row: 58, Value: 0.54179 
+Row: 92, Value: 0.535288 
+Row: 9, Value: 0.532777 
+Row: 12, Value: 0.530379 
+Row: 93, Value: 0.524516 
+Row: 89, Value: 0.520495 
+---------------------------------
+Ten closest for DATA/046_AU01_query.dat are: 
+Row: 116, Value: 0.575807 
+Row: 74, Value: 0.55707 
+Row: 89, Value: 0.54765 
+Row: 128, Value: 0.547381 
+Row: 72, Value: 0.54641 
+Row: 136, Value: 0.540196 
+Row: 137, Value: 0.540196 
+Row: 115, Value: 0.536226 
+Row: 96, Value: 0.523566 
+Row: 51, Value: 0.521045 
+---------------------------------
+Ten closest for DATA/046_AU12_query.dat are: 
+Row: 114, Value: 0.570864 
+Row: 41, Value: 0.566093 
+Row: 73, Value: 0.559058 
+Row: 90, Value: 0.557766 
+Row: 46, Value: 0.546883 
+Row: 16, Value: 0.544713 
+Row: 78, Value: 0.542533 
+Row: 53, Value: 0.541067 
+Row: 98, Value: 0.532339 
+Row: 57, Value: 0.529014 
+---------------------------------
+Ten closest for DATA/046_AU17_query.dat are: 
+Row: 116, Value: 0.567954 
+Row: 77, Value: 0.552427 
+Row: 115, Value: 0.549457 
+Row: 74, Value: 0.537691 
+Row: 51, Value: 0.529631 
+Row: 128, Value: 0.524432 
+Row: 136, Value: 0.523744 
+Row: 137, Value: 0.523744 
+Row: 72, Value: 0.50525 
+Row: 101, Value: 0.5013 
+---------------------------------
+Ten closest for DATA/047_AU01_query.dat are: 
+Row: 74, Value: 0.577248 
+Row: 128, Value: 0.562778 
+Row: 55, Value: 0.547184 
+Row: 56, Value: 0.547184 
+Row: 39, Value: 0.546673 
+Row: 137, Value: 0.540192 
+Row: 89, Value: 0.536412 
+Row: 12, Value: 0.524464 
+Row: 136, Value: 0.52374 
+Row: 111, Value: 0.515848 
+---------------------------------
+Ten closest for DATA/047_AU12_query.dat are: 
+Row: 131, Value: 0.544989 
+Row: 114, Value: 0.519747 
+Row: 11, Value: 0.512219 
+Row: 129, Value: 0.507272 
+Row: 73, Value: 0.50226 
+Row: 103, Value: 0.477338 
+Row: 16, Value: 0.467069 
+Row: 67, Value: 0.463209 
+Row: 115, Value: 0.46162 
+Row: 74, Value: 0.45967 
+---------------------------------
+Ten closest for DATA/047_AU17_query.dat are: 
+Row: 74, Value: 0.150857 
+Row: 128, Value: 0.147075 
+Row: 55, Value: 0.143 
+Row: 56, Value: 0.143 
+Row: 39, Value: 0.142866 
+Row: 137, Value: 0.141173 
+Row: 89, Value: 0.140185 
+Row: 12, Value: 0.137062 
+Row: 136, Value: 0.136873 
+Row: 111, Value: 0.134811
