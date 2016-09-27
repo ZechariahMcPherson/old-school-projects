@@ -1,0 +1,8 @@
+Creator: Gregory Zechariah McPherson
+
+The executable for this project is called potter
+
+To create and run a new executable
+"$ make clean"
+"$ make"
+"$ ./potter"
