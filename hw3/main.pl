@@ -109,7 +109,22 @@ print_query_false(Q) :-
       %Aunt
       write("aunt(rose_weasley, Aunt)"), nl,
       print_query_true(aunt(rose_weasley, Aunt)), nl,
-      print_query_false(aunt(rose_weasley, Aunt)), nl.
+      print_query_false(aunt(rose_weasley, Aunt)), nl,
+
+      %Uncle
+      write("uncle(rose_weasley, Uncle)"), nl,
+      print_query_true(uncle(rose_weasley, Uncle)), nl,
+      print_query_false(uncle(rose_weasley, Uncle)), nl,
+
+      %Niece
+      write("niece(percy_weasley, Niece)"), nl,
+      print_query_true(niece(percy_weasley, Niece)), nl,
+      print_query_false(niece(percy_weasley, Niece)), nl,
+
+      %Nephew
+      write("nephew(percy_weasley, Nephew)"), nl,
+      print_query_true(nephew(percy_weasley, Nephew)), nl,
+      print_query_false(nephew(percy_weasley, Nephew)), nl.
 
     %if the user selects option nine the program exits per your instructions
     run_opt(9) :- write('Goodbye'), nl, halt.
